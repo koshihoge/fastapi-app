@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+      "ms-python.vscode-pylance",
+      "ms-python.python",
+      "amazonwebservices.aws-toolkit-vscode",
+      "boto3typed.boto3-ide",
+      "njpwerner.autodocstring"
+    ]
+}

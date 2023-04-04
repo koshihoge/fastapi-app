@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Python: FastAPI(development)",
+        "type": "python",
+        "request": "launch",
+        "module": "uvicorn",
+        "args": ["src.app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"],
+        "jinja": true,
+        "env": {
+          "environment" : "development"
+        }
+      },
+      {
+        "name": "Python: FastAPI(staging)",
+        "type": "python",
+        "request": "launch",
+        "module": "uvicorn",
+        "args": ["src.app.main:app", "--reload"],
+        "jinja": true,
+        "env": {
+          "environment" : "staging"
+        }
+      },
+      {
+        "name": "Python: FastAPI(production)",
+        "type": "python",
+        "request": "launch",
+        "module": "uvicorn",
+        "args": ["src.app.main:app", "--reload"],
+        "jinja": true,
+        "env": {
+          "environment" : "production"
+        }
+      }
+    ]
+}

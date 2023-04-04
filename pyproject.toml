@@ -1,0 +1,67 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["山越 <koshi.hoge@gmail.com>"]
+readme = "README.md"
+packages = [{include = "app", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "3.10.9"
+fastapi = "^0.89.1"
+uvicorn = "^0.20.0"
+gunicorn = "^20.1.0"
+sqlalchemy = "^2.0.0"
+mysqlclient = "^2.1.1"
+orjson = "^3.8.5"
+python-dotenv = "^0.21.1"
+pillow = "^9.4.0"
+boto3 = "^1.26.60"
+requests = "^2.28.2"
+python-multipart = "^0.0.5"
+pathlib = "^1.0.1"
+aiofiles = "^22.1.0"
+psycopg2 = "^2.9.5"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+flake8 = "^6.0.0"
+isort = "^5.12.0"
+taskipy = "^1.10.3"
+botostubs = "^0.15.1.23.10"
+boto3-stubs = {extras = ["s3"], version = "^1.26.60"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 119
+
+[tool.isort]
+profile = "black"
+line_length = 119
+
+[tool.taskipy.settings]
+use_vars = true
+
+[tool.taskipy.variables]
+app_name = "app"
+image_name = "コンテナイメージ名を入力してください"
+region = "ECRのリポジトリがあるリージョンを入力してください"
+profile = "使用するAWSプロファイル名を入力してください"
+registry_name = "ECRのリポジトリ名を入力してください"
+
+[tool.taskipy.tasks]
+test = { cmd = "pytest tests", help = "runs all unit tests" }
+start = { cmd = "uvicorn {app_name}.main:app --reload", help = "launch test server" }
+
+build = { cmd = "docker build -t {image_name} .", help = "docker image build" }
+rm-old-image = { cmd = "docker image rm {registry_name}/{image_name}", help = "remove old docker image"  }
+tagging = { cmd = "docker tag {image_name} {registry_name}/{image_name}", help = "docker image tagging" }
+login = { cmd = "aws ecr get-login-password --region {region} --profile {profile} | docker login --username AWS --password-stdin {registry_name}", help = "ecr login" }
+push = { cmd = "docker push {registry_name}/{image_name}", help = "docker image push to ecr" }
+deploy = "task build && task rm-old-image && task tagging && task login && task push"
+list-images = { cmd = "aws ecr list-images --repository-name {image_name} --region {region} --profile {profile}", help = "ecr list images" }
