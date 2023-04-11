@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, UnicodeText
+from sqlalchemy import Integer, UnicodeText
+from sqlalchemy.orm import Mapped, mapped_column
 
 from ..database import Base
 from .mixins import TimestampMixin
@@ -6,6 +7,6 @@ from .mixins import TimestampMixin
 
 class Company(Base, TimestampMixin):  # type: ignore
     __tablename__ = "companies"
-    id: int | Column[int] = Column("id", Integer, primary_key=True, autoincrement=True)
-    name: str | Column[str] = Column("name", UnicodeText)
-    url: str | Column[str] = Column("url", UnicodeText)
+    id: Mapped[int] = mapped_column("id", Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column("name", UnicodeText)
+    url: Mapped[str] = mapped_column("url", UnicodeText)
